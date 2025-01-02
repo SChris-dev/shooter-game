@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLIENT SIDE - Shooter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- main menu -->
+     <div id="mainMenu">
+        <div class="upperMenu">
+            <img src="Sprites/shooter.png" alt="">
+            <input type="text" id="usernameInput" placeholder="Input Username">
+            <select id="selectDifficulty">
+                <option value="0" selected disabled>Select Level</option>
+                <option value='1'>Easy</option>
+                <option value="2">Medium</option>
+                <option value="3">Hard</option>
+            </select>
+        </div>
+        <div class="bodyMenu">
+            <div class="guns">
+                <div class="gunwrap">
+                    <img src="Sprites/gun1.png" alt="" width="70" height="50">
+                    <input type="radio" name="gun" id="gun1" value="gun1">
+                </div>
+                <div class="gunwrap">
+                    <img src="Sprites/gun2.png" alt="" width="70" height="50">
+                    <input type="radio" name="gun" id="gun2" value="gun2">
+                </div>
+            </div>
+            <div class="targets">
+                <div class="targetwrap">
+                    <img src="Sprites/target2.png" alt="" width="70" height="70">
+                    <input type="radio" name="target" id="target2" value="target2">
+                </div>
+                <div class="targetwrap">
+                    <img src="Sprites/target1.png" alt="" width="70" height="70">
+                    <input type="radio" name="target" id="target1" value="target1">
+                </div>
+                <div class="targetwrap">
+                    <img src="Sprites/target3.png" alt="" width="70" height="70">
+                    <input type="radio" name="target" id="target3" value="target3">
+                </div>
+            </div>
+        </div>
+        <div class="footerMenu">
+            <button id="startBtn">Play Game</button>
+            <button id="instructionBtn" class="instruksi">Instruction</button>
+        </div>
+     </div>
+
+     <!-- instruction menu -->
+    <div class="instructionWrap" id="instructionWrap" style="display: none;">
+        <div id="instructionMenu">
+          <div>
+              <h1>How to play game</h1>
+              <p>1. Input Username</p>
+              <p>2. Point the pointer at the target</p>
+              <p>3. Click to shoot</p>
+              <p>4. Get as many points as possible</p>
+              <p>5. Enjoy!</p>
+          </div>
+          <div>
+              <button id="closeBtn" style="background-color: red;">X</button>
+          </div>
+        </div>
+    </div>
+
+    <!-- game -->
+     <div id="gameContainer" style="display: none;">
+        <div class="stats">
+            <p><span>Player Name</span></p>
+            <p>Score: <span>0</span></p>
+            <p>Time: <span>00:30</span></p>
+        </div>
+        <canvas id="canvas"></canvas>
+        <div id="leaderboardContainer">
+            <h2>LEADERBOARD</h2>
+            <select id="leaderboardFilter">
+                <option value="1">Sort by Score</option>
+                <option value="2">Sort by Name</option>
+            </select>
+            <div class="playerStats">
+                <div class="nameScore">
+                    <p>Name</p>
+                    <p>Score: 0</p>
+                </div>
+                <div class="theDetail">
+                    <button id="detailBtn" style="background-color: #FDFF00; color: black; font-weight: normal; font-size: 14px; padding: 7px 10px;">Detail</button>
+                </div>
+            </div>
+        </div>
+     </div>
+
+
+    <script src="script.js"></script>
+    <script src="menu.js"></script>
+</body>
+</html>
