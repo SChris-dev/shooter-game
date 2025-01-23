@@ -1,0 +1,225 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#mainMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+input#usernameInput {
+    background-color: rgb(230, 230, 230);
+    border: 3px solid gray;
+    border-radius: 15px;
+    padding: 10px 10px;
+    width: 90%;
+}
+
+select#selectLevel {
+    background-color: rgb(230, 230, 230);
+    border: 3px solid gray;
+    border-radius: 15px;
+    padding: 10px;
+    width: 100%;
+}
+
+.gunSkins {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.gunSkins .gun-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.gunSkins .gun-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.targetSkins {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.targetSkins .target-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.targetSkins .target-2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.targetSkins .target-3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.buttons #startGame {
+    background-color: green;
+    border: 1px solid green;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 30px;
+    cursor: pointer;
+}
+
+.buttons #showInstruction {
+    background-color: #a56c2a;
+    border: 1px solid #a56c2a;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#instructionPage {
+    background-color: rgb(41, 41, 41);
+    color: white;
+    padding: 40px;
+    width: 400px;
+    justify-content: space-between;
+}
+
+button#closeInstructionBtn {
+    background-color: red;
+    color: white;
+    border: 1px solid red;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.global-flex {
+    display: flex;
+    gap: 50px;
+}
+
+#canvas {
+    border: 1px solid black;
+    cursor: none;
+}
+
+.gameStatus {
+    position: absolute;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: #000000a4;
+    color: white;
+    font-weight: 900;
+    width: 1001px;
+}
+
+.leaderboard {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    background-color: rgb(17, 17, 17);
+    color: white;
+    width: 200px;
+    align-items: stretch;
+}
+
+select#filter {
+    width: 100%;
+}
+
+.player {
+    display: flex;
+    border-bottom: 1px solid white;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.player button#detailBtn {
+    background-color: yellow;
+    color: black;
+    font-weight: 700;
+    padding: 10px;
+}
+
+#gameOver {
+    position: absolute;
+    background-color: #000000f1;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+    border-radius: 15px;
+}
+
+#gameOver #saveScore {
+    background-color: yellow;
+    padding: 10px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#gameOver #restartBtn {
+    background-color: white;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#pauseGame {
+    position: absolute;
+    background-color: #000000f1;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+    border-radius: 15px;
+}
+
+#pauseGame #continueBtn {
+    background-color: yellow;
+    padding: 10px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+}

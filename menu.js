@@ -1,60 +1,64 @@
 // pages
 const mainMenu = document.getElementById('mainMenu');
-const instructionMenu = document.getElementById('instructionWrap')
+const instructionPage = document.getElementById('instructionPage');
 const gameContainer = document.getElementById('gameContainer');
+const gameOverContainer = document.getElementById('gameOver');
+const pauseGame = document.getElementById('pauseGame');
 
 // buttons
-const startBtn = document.getElementById('startBtn');
-const instructionBtn = document.getElementById('instructionBtn');
-const closeBtn = document.getElementById('closeBtn');
+const startGame = document.getElementById('startGame');
+const showInstruction = document.getElementById('showInstruction');
+const closeInstructionBtn = document.getElementById('closeInstructionBtn');
+const saveScore = document.getElementById('saveScore');
+const restartBtn = document.getElementById('restartBtn');
+const continueBtn = document.getElementById('continueBtn');
 
 // inputs
 const usernameInput = document.getElementById('usernameInput');
-const selectDifficulty = document.getElementById('selectDifficulty');
+const selectLevel = document.getElementById('selectLevel');
 
-// play game
-startBtn.addEventListener('click', () => {
-    const username = usernameInput.value;
-    difficulty = parseInt(selectDifficulty.value, 10);
-    const selectedGun = document.querySelector('input[name="gun"]:checked')?.value;
-    const selectedTarget = document.querySelector('input[name="target"]:checked')?.value;
+const gunSkin1 = document.getElementById('gunSkin1');
+const gunSkin2 = document.getElementById('gunSkin2');
+const targetSkin1 = document.getElementById('targetSkin1');
+const targetSkin2 = document.getElementById('targetSkin2');
+const targetSkin3 = document.getElementById('targetSkin3');
+
+// open instruction
+showInstruction.addEventListener('click', () => {
+    instructionPage.style.display = 'flex';
+})
+
+// close instruction
+closeInstructionBtn.addEventListener('click', () => {
+    instructionPage.style.display = 'none';
+})
+
+// start game
+startGame.addEventListener('click', () => {
+    let username = usernameInput.value;
+    const selectedGun = document.querySelector('input[name="gun"]:checked');
+    const selectedTarget = document.querySelector('input[name="target"]:checked');
+    let selectedLevel = selectLevel.value;
 
     if (username.trim() === '') {
-        alert('Please enter your username')
+        alert('please input your name');
+        return;
+    } else if (!selectedGun) {
+        alert('please select a gun');
+        return;
+    } else if (!selectedTarget) {
+        alert('please select a target');
+        return;
+    } else if (selectedLevel === '0') {
+        alert('please select a level');
         return;
     }
 
-    if (!difficulty) {
-        alert('Please select a level')
-        return;
-    }
 
-    if (!selectedGun) {
-        alert('Please select gun')
-        return;
-    }
-
-    if (!selectedTarget) {
-        alert('Please select target')
-        return;
-    }
 
     mainMenu.style.display = 'none';
     gameContainer.style.display = 'flex';
 
-    startGame({
-        gun: selectedGun,
-        target: selectedTarget
-    });
-})
+    gameStart();
 
-// see instruction
-instructionBtn.addEventListener('click', () => {
-    instructionMenu.style.display = 'flex';
 })
-
-// close instruction
-closeBtn.addEventListener('click', () => {
-    instructionMenu.style.display = 'none';
-})
-
