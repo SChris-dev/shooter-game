@@ -12,47 +12,87 @@ const cHeight = canvas.height;
 const usernameText = document.getElementById('usernameText');
 const scoreText = document.getElementById('scoreText');
 const timerText = document.getElementById('timerText');
+const countdownText = document.getElementById('countdownText');
 let score = 0;
 let username;
 let timer;
 let timerInterval;
 let level;
 let running = false;
+let countdownTimer = 3;
+let countdownInterval;
+let paused = false;
+let countdownPauseTimer = 3;
+let pauseInterval;
+
 
 // level timer
 function startGameTimer() {
     timerInterval = setInterval(() => {
         timer -= 1;
         timerText.innerHTML = timer;
-        console.log(timer);
     }, 1000);
 }
 
+// countdown timer
+function startCountdownGameStart() {
+    username = usernameInput.value;
+    usernameText.innerHTML = username;
+    level = selectLevel.value;
+    score = 0;
+    scoreText.innerHTML = score;
+    countdownInterval = setInterval(() => {
+        countdownTimer -= 1;
+        countdownText.innerHTML = countdownTimer;
+        if (countdownTimer < 1) {
+            clearInterval(countdownInterval);
+            running = true;
+            gameStart();
+            countdownText.style.display = 'none';
+        }
+    }, 1000);
+}
+
+// pause timer
+function startPauseCountdown() {
+    countdownText.style.display = 'block';
+    pauseInterval = setInterval(() => {
+        countdownPauseTimer -= 1;
+        countdownText.innerHTML = countdownPauseTimer;
+        if (countdownPauseTimer < 1) {
+            clearInterval(pauseInterval);
+            running = true;
+            paused = false;
+            countdownText.style.display = 'none';
+            gameContinue();
+        }
+    }, 1000)
+}
 
 // images
 const backgroundImage = new Image();
-backgroundImage.src = './MODULE_CLIENT_MEDIA/Sprites/background.jpg';
+backgroundImage.src = './Sprites/background.jpg';
 
 const imageGun1 = new Image();
-imageGun1.src = './MODULE_CLIENT_MEDIA/Sprites/gun1.png';
+imageGun1.src = './Sprites/gun1.png';
 
 const imageGun2 = new Image();
-imageGun2.src = './MODULE_CLIENT_MEDIA/Sprites/gun2.png';
+imageGun2.src = './Sprites/gun2.png';
 
 const imageTarget1 = new Image();
-imageTarget1.src = './MODULE_CLIENT_MEDIA/Sprites/target1.png';
+imageTarget1.src = './Sprites/target1.png';
 
 const imageTarget2 = new Image();
-imageTarget2.src = './MODULE_CLIENT_MEDIA/Sprites/target2.png';
+imageTarget2.src = './Sprites/target2.png';
 
 const imageTarget3 = new Image();
-imageTarget3.src = './MODULE_CLIENT_MEDIA/Sprites/target3.png';
+imageTarget3.src = './Sprites/target3.png';
 
 const imagePointer = new Image();
-imagePointer.src = './MODULE_CLIENT_MEDIA/Sprites/pointer.png';
+imagePointer.src = './Sprites/pointer.png';
 
 const imageBoom = new Image();
-imageBoom.src = './MODULE_CLIENT_MEDIA/Sprites/boom.png';
+imageBoom.src = './Sprites/boom.png';
 
 // cursor to pointer
 let cursor = {
@@ -109,7 +149,10 @@ function createTarget() {
         x: targetX,
         y: targetY,
         width: target.width,
-        height: target.height
+        height: target.height,
+        scale: 0,
+        maxScale: 1,
+        scaleSpeed: 0.05
     }
 }
 
@@ -117,7 +160,7 @@ function createTarget() {
 function spawnTarget() {
     targetInterval = setInterval(() => {
         targets.push(createTarget());
-    }, 1000);
+    }, 3000);
 }
 
 // draw the target depending on the skin user selected
@@ -125,17 +168,26 @@ function drawTarget() {
     const selectedTarget = document.querySelector('input[name="target"]:checked');
 
     targets.forEach(target => {
+        if (target.scale < target.maxScale) {
+            target.scale = Math.min(target.maxScale, target.scale + target.scaleSpeed);
+        }
+
+        const scaledWidth = target.width * target.scale;
+        const scaledHeight = target.height * target.scale;
+        const drawX = target.x + (target.width - scaledWidth) / 2;
+        const drawY = target.y + (target.height - scaledHeight) / 2;
+
         if (selectedTarget && selectedTarget.value === "1") {
             if (imageTarget1.complete) {
-                ctx.drawImage(imageTarget1, target.x, target.y, target.width, target.height);
+                ctx.drawImage(imageTarget1, drawX, drawY, scaledWidth, scaledHeight);
             }
         } else if (selectedTarget && selectedTarget.value === "2") {
             if (imageTarget2.complete) {
-                ctx.drawImage(imageTarget2, target.x, target.y, target.width, target.height);
+                ctx.drawImage(imageTarget2, drawX, drawY, scaledWidth, scaledHeight);
             }
         } else if (selectedTarget && selectedTarget.value === "3") {
             if (imageTarget3.complete) {
-                ctx.drawImage(imageTarget3, target.x, target.y, target.width, target.height);
+                ctx.drawImage(imageTarget3, drawX, drawY, scaledWidth, scaledHeight);
             }
         }
     });
@@ -155,7 +207,7 @@ canvas.addEventListener('click', () => {
             );
     
             if (isHit) {
-                score += 10;
+                score += 1;
                 scoreText.innerHTML = score;
                 hit = true;
                 // if (imageBoom.complete) {
@@ -185,22 +237,14 @@ function drawBackground() {
 
 // game loop
 function gameLoop() {
-    if (running) {
+
+    if (running && !paused) {
         drawBackground();
-        drawGun();
         drawTarget();
+        drawGun();
         drawPointer();
         
         requestAnimationFrame(gameLoop);
-
-        window.addEventListener('keydown', (e) => {
-            const pressedKey = e.key;
-            console.log(pressedKey);
-        
-            if (pressedKey === 'Escape') {
-                gamePause();
-            }
-        })
     }
 
 
@@ -216,7 +260,6 @@ function gameLoop() {
 function gameStart() {
     ctx.clearRect(0, 0, cWidth, cHeight);
     gameOverContainer.style.display = 'none';
-    running = true;
     username = usernameInput.value;
     usernameText.innerHTML = username;
     level = selectLevel.value;
@@ -240,22 +283,31 @@ function gameStart() {
         x: Math.floor(Math.random() * cWidth - 100),
         y: Math.floor(Math.random() * cHeight / 2),
         width: 150,
-        height: 150
+        height: 150,
+        scale: 0,
+        maxScale: 1,
+        scaleSpeed: 0.05
     },
     {
         x: Math.floor(Math.random() * cWidth - 100),
         y: Math.floor(Math.random() * cHeight / 2),
         width: 150,
-        height: 150
+        height: 150,
+        scale: 0,
+        maxScale: 1,
+        scaleSpeed: 0.05
     },
     {
         x: Math.floor(Math.random() * cWidth - 100),
         y: Math.floor(Math.random() * cHeight / 2),
         width: 150,
-        height: 150
+        height: 150,
+        scale: 0,
+        maxScale: 1,
+        scaleSpeed: 0.05
     },
     ]
-
+    
     startGameTimer();
     createTarget();
     spawnTarget();
@@ -273,19 +325,117 @@ function gameOver() {
 }
 
 // restart
-restartBtn.addEventListener('click', gameStart);
+restartBtn.addEventListener('click', () => {
+    ctx.clearRect(0, 0, cWidth, cHeight);
+    countdownTimer = 3;
+    countdownText.style.display = 'block';
+    countdownText.innerHTML = countdownTimer;
+    gameOverContainer.style.display = 'none';
+    startCountdownGameStart();
+});
+
 
 // pause game
 function gamePause() {
     clearInterval(timerInterval);
     clearInterval(targetInterval);
     running = false;
+    paused = true;
     pauseGame.style.display = 'flex';
 }
 
-// continue game
-continueBtn.addEventListener('click', () => {
-    running = true;
-    pauseGame.style.display = 'none';
+window.addEventListener('keydown', (e) => {
+    const pressedKey = e.key;
+    console.log(pressedKey);
+
+    if (pressedKey === 'Escape' && running && !paused) {
+        gamePause();
+    } else if (pressedKey === 'Escape' && !running && paused && countdownPauseTimer <= 0) {
+        countdownPauseTimer = 3;
+        countdownText.innerHTML = countdownPauseTimer;
+        pauseGame.style.display = 'none';
+        startPauseCountdown();
+    }
+
+    if (pressedKey === ' ') {
+        
+    }
+
 })
 
+
+// continue game
+continueBtn.addEventListener('click', () => {
+    countdownPauseTimer = 3;
+    countdownText.innerHTML = countdownPauseTimer;
+    pauseGame.style.display = 'none';
+    startPauseCountdown();
+})
+
+function gameContinue() {
+
+    startGameTimer();
+    createTarget();
+    spawnTarget();
+    gameLoop();
+}
+
+// save score
+const saveScoreBtn = document.getElementById('saveScore');
+
+saveScoreBtn.addEventListener('click', setLeaderboard);
+
+function setLeaderboard() {
+    let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+
+    if (leaderboard) {
+        let usernameHighScore = leaderboard.find(function (val) {
+            return val.name == usernameInput.value
+        });
+
+        if (!usernameHighScore) {
+            leaderboard.push({
+                name: usernameInput.value,
+                score: score
+            })
+        }
+        else {
+            usernameHighScore.score = Math.max(usernameHighScore.score, score);
+        }
+    }
+    else {
+        localStorage.setItem('leaderboard', JSON.stringify({
+            name: usernameInput.value,
+            score: score
+        }));
+        return;
+
+    }
+    
+    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+
+    location.reload();
+}
+
+// show leaderboard
+let leaderboardDisplay = JSON.parse(localStorage.getItem('leaderboard'));
+leaderboardDisplay = leaderboardDisplay.sort((a, b) => {
+    return b.score - a.score;
+})
+
+const leaderboardShow = document.getElementById('leaderboardShow');
+leaderboardDisplay.forEach((val) => {
+    const row = document.createElement('div');
+    row.classList.add('player');
+    row.innerHTML = `<div>
+                    <p>${val.name}</p>
+                    <p>Score: ${val.score}</p>
+                    </div>
+                    <button><i>Detail</i></button>`
+
+    const innerRowDiv = row.querySelector('div');
+    const innerRowBtn = row.querySelector('button');
+    innerRowDiv.classList.add('stats');
+    innerRowBtn.classList.add('detail-btn');
+    leaderboardShow.appendChild(row);
+});

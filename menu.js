@@ -59,6 +59,6 @@ startGame.addEventListener('click', () => {
     mainMenu.style.display = 'none';
     gameContainer.style.display = 'flex';
 
-    gameStart();
+    startCountdownGameStart();
 
 })

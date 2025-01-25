@@ -71,32 +71,27 @@
     
     <!-- Game -->
     <div id="gameContainer" style="display: none;">
+        <div class="gameCountdown">
+            <span id="countdownText">3</span>
+        </div>
         <div class="gameStatus">
-            <p id="usernameText">Player Name</p>
+            <p id="usernameText"></p>
             <p>Score: <span id="scoreText">0</span></p>
-            <p>Time: 00:<span id="timerText">30</span></p>
+            <p>Time: 00:<span id="timerText">00</span></p>
         </div>
         <canvas id="canvas"></canvas>
-        <div class="leaderboard">
+        <div class="leaderboard" id="leaderboardShow">
             <h2 style="text-align: center;">LEADERBOARD</h2>
             <select name="filter" id="filter">
                 <option value="0">Sort By Score</option>
+                <option value="1">Last Matches</option>
             </select>
             <div class="player">
                 <div class="stats">
-                    <p>Thomas Galih</p>
-                    <p>Score: 44</p>
+                    <p>Player 1</p>
+                    <p>Score: 8</p>
                 </div>
-                <button id="detailBtn">
-                    <i>Detail</i>
-                </button>
-            </div>
-            <div class="player">
-                <div class="stats">
-                    <p>Thomas Galih</p>
-                    <p>Score: 44</p>
-                </div>
-                <button id="detailBtn">
+                <button id="detailBtn" class="detail-btn">
                     <i>Detail</i>
                 </button>
             </div>
@@ -108,7 +103,7 @@
         <h1>GAME OVER!</h1>
         <p>Username: <span id="usernameGameOver"></span></p>
         <p>Score: <span id="scoreGameOver"></span></p>
-        <button id="saveScore"><i>Save Match History</i></button>
+        <button id="saveScore"><i>Save Score</i></button>
         <button id="restartBtn">Restart</button>
     </div>
 

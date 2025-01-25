@@ -169,11 +169,12 @@ select#filter {
     align-items: center;
 }
 
-.player button#detailBtn {
+.player button.detail-btn {
     background-color: yellow;
     color: black;
     font-weight: 700;
     padding: 10px;
+    cursor: pointer;
 }
 
 #gameOver {
@@ -222,4 +223,12 @@ select#filter {
     border: 1px solid transparent;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.gameCountdown {
+    position: absolute;
+    top: 200px;
+    left: 600px;
+    font-size: 160px;
+    font-weight: 700;
 }
